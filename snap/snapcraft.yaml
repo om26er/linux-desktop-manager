@@ -14,8 +14,6 @@ apps:
     command: linux-desktop-manager
     plugs:
       - network
-    slots:
-      - kde-screensaver-dbus
 
 parts:
   linux-desktop-manager:

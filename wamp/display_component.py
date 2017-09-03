@@ -1,6 +1,7 @@
 import asyncio
 import logging
 
+from autobahn.wamp.types import RegisterOptions
 from autobahn.asyncio.wamp import (
     ApplicationSession,
     ApplicationRunner,
@@ -15,9 +16,10 @@ LOGGER.setLevel(logging.INFO)
 class DisplayController(ApplicationSession):
     async def onJoin(self, details):
         LOGGER.info('Joined realm \'{}\'.'.format(details.realm))
-        display = manager.DisplayManager('kde')
-        await self.register(display.is_screen_locked, 'com.om26er.ldm.is_screen_locked')
-        await self.register(display.lock_screen, 'com.om26er.ldm.lock_screen')
+        display = manager.Display('kde')
+        options = RegisterOptions(match='exact', invoke='roundrobin')
+        await self.register(display.is_locked, 'com.om26er.ldm.is_screen_locked', options)
+        await self.register(display.lock, 'com.om26er.ldm.lock_screen', options)
         LOGGER.info('Registered all procedures, ready to go.')
 
     def onDisconnect(self):
