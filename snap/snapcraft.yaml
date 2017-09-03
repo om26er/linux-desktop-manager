@@ -12,9 +12,10 @@ confinement: devmode
 apps:
   linux-desktop-manager:
     command: linux-desktop-manager
+    #daemon: simple
     plugs:
       - network
-  get-id:
+  machine-id:
     command: cat $SNAP_USER_DATA/machine-id
 
 parts:
