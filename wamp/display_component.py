@@ -19,7 +19,8 @@ class DisplayController(ApplicationSession):
         LOGGER.info('Joined realm \'{}\'.'.format(details.realm))
         display = manager.Display(os.environ.get('XDG_CURRENT_DESKTOP', 'KDE').lower())
         machine_id = await display.get_machine_id()
-        os.environ['LDM_MACHINE_ID'] = machine_id
+        with open(os.path.join(os.environ['SNAP_USER_DATA'], 'machine-id'), 'w') as file:
+            file.write(machine_id)
         options = RegisterOptions(match='exact', invoke='roundrobin')
         await self.register(display.is_locked,
                             'com.om26er.ldm.machine-{}.is_screen_locked'.format(machine_id),
