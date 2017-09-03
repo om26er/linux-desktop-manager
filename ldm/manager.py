@@ -44,9 +44,9 @@ class Display:
         return getattr(self.iface, DBUS_DATA[self.environment]['methods']['is_locked'])()
 
     async def lock(self):
-        if not self.is_locked():
+        if not await self.is_locked():
             getattr(self.iface, DBUS_DATA[self.environment]['methods']['lock'])()
-        return self.is_locked()
+        return await self.is_locked()
 
     # FIXME: Ugly, move it to a sane place. (or just rename the class?)
     async def get_machine_id(self):
