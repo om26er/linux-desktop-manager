@@ -31,8 +31,8 @@ DBUS_DATA = {
 }
 
 
-class DisplayManager:
-    def __init__(self, environment='kde'):
+class Display:
+    def __init__(self, environment):
         if environment not in DBUS_DATA.keys():
             raise RuntimeError('Supported environments: {}'.format(', '.join(DBUS_DATA.keys())))
         bus = dbus.SessionBus()
@@ -40,10 +40,10 @@ class DisplayManager:
         self.iface = dbus.Interface(screen_saver, DBUS_DATA[environment]['interface'])
         self.environment = environment
 
-    def is_screen_locked(self):
+    def is_locked(self):
         return getattr(self.iface, DBUS_DATA[self.environment]['methods']['is_locked'])()
 
-    def lock_screen(self):
-        if not self.is_screen_locked():
+    def lock(self):
+        if not self.is_locked():
             getattr(self.iface, DBUS_DATA[self.environment]['methods']['lock'])()
-        return self.is_screen_locked()
+        return self.is_locked()
