@@ -36,14 +36,19 @@ class Display:
         if environment not in DBUS_DATA.keys():
             raise RuntimeError('Supported environments: {}'.format(', '.join(DBUS_DATA.keys())))
         bus = dbus.SessionBus()
-        screen_saver = bus.get_object(DBUS_DATA[environment]['service_name'], DBUS_DATA[environment]['path'])
-        self.iface = dbus.Interface(screen_saver, DBUS_DATA[environment]['interface'])
+        self.screen_saver = bus.get_object(DBUS_DATA[environment]['service_name'], DBUS_DATA[environment]['path'])
+        self.iface = dbus.Interface(self.screen_saver, DBUS_DATA[environment]['interface'])
         self.environment = environment
 
-    def is_locked(self):
+    async def is_locked(self):
         return getattr(self.iface, DBUS_DATA[self.environment]['methods']['is_locked'])()
 
-    def lock(self):
+    async def lock(self):
         if not self.is_locked():
             getattr(self.iface, DBUS_DATA[self.environment]['methods']['lock'])()
         return self.is_locked()
+
+    # FIXME: Ugly, move it to a sane place. (or just rename the class?)
+    async def get_machine_id(self):
+        iface = dbus.Interface(self.screen_saver, 'org.freedesktop.DBus.Peer')
+        return getattr(iface, 'GetMachineId')()
