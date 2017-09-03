@@ -14,6 +14,8 @@ apps:
     command: linux-desktop-manager
     plugs:
       - network
+  get-id:
+    command: cat $SNAP_USER_DATA/machine-id
 
 parts:
   linux-desktop-manager:
