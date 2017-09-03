@@ -1,0 +1,2 @@
+autobahn
+dbus-python
