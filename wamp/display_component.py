@@ -18,10 +18,16 @@ class DisplayController(ApplicationSession):
     async def onJoin(self, details):
         LOGGER.info('Joined realm \'{}\'.'.format(details.realm))
         display = manager.Display(os.environ.get('XDG_CURRENT_DESKTOP', 'KDE').lower())
+        machine_id = await display.get_machine_id()
         options = RegisterOptions(match='exact', invoke='roundrobin')
-        await self.register(display.is_locked, 'com.om26er.ldm.is_screen_locked', options)
-        await self.register(display.lock, 'com.om26er.ldm.lock_screen', options)
+        await self.register(display.is_locked,
+                            'com.om26er.ldm.machine-{}.is_screen_locked'.format(machine_id),
+                            options)
+        await self.register(display.lock,
+                            'com.om26er.ldm.machine-{}.lock_screen'.format(machine_id),
+                            options)
         LOGGER.info('Registered all procedures, ready to go.')
+        LOGGER.info('Machine ID: {}'.format(machine_id))
 
     def onDisconnect(self):
         LOGGER.info('Session disconnected.')
