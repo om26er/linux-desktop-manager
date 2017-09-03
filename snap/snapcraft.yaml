@@ -1,5 +1,5 @@
 name: linux-desktop-manager
-version: '0.1'
+version: '0.2'
 summary: Remote manager for Linux desktops
 description: |
   Linux Desktop Manager allows you to remotely manage your desktop.
@@ -7,7 +7,7 @@ description: |
   Note: This is not a RDP client.
 
 grade: stable
-confinement: strict
+confinement: devmode
 
 apps:
   linux-desktop-manager:
@@ -25,8 +25,8 @@ parts:
       - libdbus-1-dev
       - libdbus-glib-1-dev
 
-slots:
-  kde-screensaver-dbus:
-    interface: dbus
-    name: org.kde.screensaver
-    bus: session
+#slots:
+#  kde-screensaver-dbus:
+#    interface: dbus
+#    name: org.kde.screensaver
+#    bus: session
