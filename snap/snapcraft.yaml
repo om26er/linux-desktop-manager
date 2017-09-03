@@ -14,6 +14,7 @@ apps:
     command: linux-desktop-manager
     plugs:
       - network
+    slots:
       - kde-screensaver-dbus
 
 parts:
@@ -26,7 +27,7 @@ parts:
       - libdbus-1-dev
       - libdbus-glib-1-dev
 
-plugs:
+slots:
   kde-screensaver-dbus:
     interface: dbus
     name: org.kde.screensaver
