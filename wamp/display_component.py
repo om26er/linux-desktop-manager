@@ -1,44 +1,33 @@
-import asyncio
-import logging
 import os
 
-from autobahn.wamp.types import RegisterOptions
-from autobahn.asyncio.wamp import (
-    ApplicationSession,
-    ApplicationRunner,
-)
+from autobahn.asyncio.component import Component, run
 
 from ldm import manager
 
-LOGGER = logging.getLogger(__name__)
-LOGGER.setLevel(logging.INFO)
+CONFIG_TRANSPORT = {
+    "type": "websocket",
+    "url": u"ws://ldm.om26er.com/ws"
+}
+with open('/etc/machine-id') as f:
+    MACHINE_ID = f.read().strip()
 
 
-class DisplayController(ApplicationSession):
-    async def onJoin(self, details):
-        LOGGER.info('Joined realm \'{}\'.'.format(details.realm))
-        display = manager.Display(os.environ.get('XDG_CURRENT_DESKTOP', 'KDE').lower())
-        machine_id = await display.get_machine_id()
-        with open(os.path.join(os.environ['SNAP_USER_DATA'], 'machine-id'), 'w') as file:
-            file.write(machine_id)
-        options = RegisterOptions(match='exact', invoke='roundrobin')
-        await self.register(display.is_locked,
-                            'com.om26er.ldm.machine-{}.is_screen_locked'.format(machine_id),
-                            options)
-        await self.register(display.lock,
-                            'com.om26er.ldm.machine-{}.lock_screen'.format(machine_id),
-                            options)
-        LOGGER.info('Registered all procedures, ready to go.')
-        LOGGER.info('Machine ID: {}'.format(machine_id))
+component = Component(transports=[CONFIG_TRANSPORT], realm=u"ldm")
+display = manager.Display(os.environ.get('XDG_CURRENT_DESKTOP', 'KDE').lower())
 
-    def onDisconnect(self):
-        LOGGER.info('Session disconnected.')
-        asyncio.get_event_loop().stop()
+
+@component.register('com.om26er.ldm.machine-{}.is_screen_locked'.format(MACHINE_ID))
+def is_locked():
+    return display.is_locked()
+
+
+@component.register('com.om26er.ldm.machine-{}.lock_screen'.format(MACHINE_ID))
+def lock():
+    return display.lock()
 
 
 def main():
-    runner = ApplicationRunner(url=u'ws://ldm.om26er.com/ws', realm=u'ldm')
-    runner.run(DisplayController)
+    run(component)
 
 
 if __name__ == '__main__':
