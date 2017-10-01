@@ -12,7 +12,7 @@ confinement: devmode
 apps:
   linux-desktop-manager:
     command: linux-desktop-manager
-    daemon: simple
+    #daemon: simple
     plugs:
       - network
   mid:
