@@ -1,9 +1,0 @@
-[Unit]
-Description=Linux Desktop Manager
-
-[Service]
-Type=simple
-ExecStart=/usr/local/bin/linux-desktop-manager
-
-[Install]
-WantedBy=multi-user.target

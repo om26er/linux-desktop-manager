@@ -1,4 +1,2 @@
 autobahn
 dbus-python
-# Temporary until https://github.com/crossbario/autobahn-python/issues/907 is fixed
-twisted

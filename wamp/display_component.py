@@ -7,14 +7,14 @@ from ldm import manager
 
 CONFIG_TRANSPORT = {
     "type": "websocket",
-    "url": u"ws://ldm.om26er.com/ws"
+    "url": u"ws://localhost:8080/ws"
 }
 with open('/etc/machine-id') as f:
     MACHINE_ID = f.read().strip()
 OPTIONS = RegisterOptions(match='exact', invoke='roundrobin')
 
 
-component = Component(transports=[CONFIG_TRANSPORT], realm=u"ldm")
+component = Component(transports=[CONFIG_TRANSPORT], realm=u"realm1")
 display = manager.Display(os.environ.get('XDG_CURRENT_DESKTOP', 'KDE').lower())
 
 

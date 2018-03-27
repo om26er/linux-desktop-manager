@@ -21,7 +21,7 @@ DBUS_DATA = {
     },
     'gnome': {
         'service_name': 'org.gnome.ScreenSaver',
-        'path': '/ScreenSaver',
+        'path': '/org/gnome/ScreenSaver',
         'interface': 'org.gnome.ScreenSaver',
         'methods': {
             'is_locked': 'GetActive',
@@ -29,6 +29,9 @@ DBUS_DATA = {
         }
     }
 }
+
+DBUS_DATA.update({'ubuntu:gnome': DBUS_DATA['gnome']})
+DBUS_DATA.update({'ubuntu:unity': DBUS_DATA['unity']})
 
 
 class Display:
