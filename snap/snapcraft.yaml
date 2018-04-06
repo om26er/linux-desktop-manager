@@ -7,16 +7,14 @@ description: |
   Note: This is not a RDP client.
 
 grade: stable
-confinement: devmode
+confinement: strict
 
 apps:
   linux-desktop-manager:
     command: linux-desktop-manager
-    #daemon: simple
     plugs:
       - network
-  mid:
-    command: cat /etc/machine-id
+      - desktop
 
 parts:
   linux-desktop-manager:
