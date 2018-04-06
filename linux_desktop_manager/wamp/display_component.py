@@ -3,7 +3,7 @@ import os
 
 from autobahn.asyncio.wamp import ApplicationSession, ApplicationRunner
 from autobahn.wamp import RegisterOptions
-import dbus
+# import dbus
 
 from linux_desktop_manager.controller import manager
 
@@ -12,10 +12,12 @@ PROCEDURE_LOCK = 'com.om26er.ldm.machine-{}.lock_screen'
 
 
 def get_machine_id():
-    bus = dbus.SessionBus()
-    obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
-    iface = dbus.Interface(obj, 'org.freedesktop.DBus.Peer')
-    return str(iface.get_dbus_method('GetMachineId')())
+    # bus = dbus.SessionBus()
+    # obj = bus.get_object('org.freedesktop.DBus', '/org/freedesktop/DBus')
+    # iface = dbus.Interface(obj, 'org.freedesktop.DBus.Peer')
+    # return str(iface.get_dbus_method('GetMachineId')())
+    with open("/etc/machine-id") as f:
+        return f.read().strip()
 
 
 class ClientSession(ApplicationSession):

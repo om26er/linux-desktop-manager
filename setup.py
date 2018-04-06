@@ -4,7 +4,7 @@ from distutils.core import setup
 
 setup(
     name='linux-desktop-manager',
-    version='0.2',
+    version='0.3',
     description='Remote manager for Linux desktops',
     author='Omer Akram',
     author_email='om26er@gmail.com',
