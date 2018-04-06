@@ -1,2 +1,4 @@
 autobahn
 dbus-python
+qrcode[pil]
+
