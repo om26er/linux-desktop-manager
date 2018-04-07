@@ -2,8 +2,9 @@
 
 This is a work in progress tool for Linux based systems allowing users to remotely manage their desktops.
 
-The main idea is to run a background daemon on your desktop which is always connected to a remote server, the controller
-lets say your Android phone then connects to that server and makes remote procedure calls on your desktop
+The main idea is to run a background daemon on your desktop which is always connected to a remote server, the
+controller, lets say your Android phone then connects to that server and makes remote procedure calls that are routed
+towards your desktop.
 
 Currently it only allows to lock the screen.
 
@@ -44,3 +45,9 @@ You can also check the screen lock status
 ```
 http localhost:8080/call procedure=com.om26er.ldm.machine-<your_machine_id>.is_screen_locked
 ```
+
+TODO:
+* An Android app
+* Make LDM a daemon that starts automatically
+* Host a free Crossbar instance with TLS and Cryptosign auth enabled
+* Figure out a very secure pairing mechanism
