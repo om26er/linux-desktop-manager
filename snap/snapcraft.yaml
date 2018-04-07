@@ -2,11 +2,9 @@ name: linux-desktop-manager
 version: '0.3'
 summary: Remote manager for Linux desktops
 description: |
-  Linux Desktop Manager allows you to remotely manage your desktop.
+  Linux Desktop Manager allows you to remotely manage your linux desktop.
 
-  Note: This is not a RDP client.
-
-grade: stable
+grade: devel
 confinement: strict
 
 apps:
@@ -15,6 +13,10 @@ apps:
     plugs:
       - network
       - desktop
+  pair:
+    environment:
+      PYTHONIOENCODING: UTF-8
+    command: qr_gen.sh
 
 parts:
   linux-desktop-manager:
@@ -25,3 +27,9 @@ parts:
       - pkg-config
       - libdbus-1-dev
       - libdbus-glib-1-dev
+
+  pairing-launcher:
+    plugin: dump
+    source: .
+    prime:
+      - qr_gen.sh

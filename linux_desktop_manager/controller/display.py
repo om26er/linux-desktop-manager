@@ -1,3 +1,5 @@
+import os
+
 import dbus
 
 DBUS_DATA = {
@@ -35,14 +37,14 @@ DBUS_DATA.update({'ubuntu:unity': DBUS_DATA['unity']})
 
 
 class Display:
-    def __init__(self, environment):
-        if environment not in DBUS_DATA.keys():
+    def __init__(self):
+        self.environment = os.environ.get('XDG_CURRENT_DESKTOP', '').lower()
+        if self.environment not in DBUS_DATA.keys():
             raise RuntimeError('Supported environments: {}'.format(', '.join(DBUS_DATA.keys())))
         bus = dbus.SessionBus()
-        self.screen_saver = bus.get_object(DBUS_DATA[environment]['service_name'],
-                                           DBUS_DATA[environment]['path'])
-        self.iface = dbus.Interface(self.screen_saver, DBUS_DATA[environment]['interface'])
-        self.environment = environment
+        self.screen_saver = bus.get_object(DBUS_DATA[self.environment]['service_name'],
+                                           DBUS_DATA[self.environment]['path'])
+        self.iface = dbus.Interface(self.screen_saver, DBUS_DATA[self.environment]['interface'])
 
     async def is_locked(self):
         return getattr(self.iface, DBUS_DATA[self.environment]['methods']['is_locked'])()

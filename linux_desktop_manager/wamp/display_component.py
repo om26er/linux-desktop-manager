@@ -1,11 +1,9 @@
 import asyncio
-import os
 
 from autobahn.asyncio.wamp import ApplicationSession, ApplicationRunner
 from autobahn.wamp import RegisterOptions
-# import dbus
 
-from linux_desktop_manager.controller import manager
+from linux_desktop_manager.controller import display
 
 PROCEDURE_IS_LOCKED = 'com.om26er.ldm.machine-{}.is_screen_locked'
 PROCEDURE_LOCK = 'com.om26er.ldm.machine-{}.lock_screen'
@@ -25,12 +23,11 @@ class ClientSession(ApplicationSession):
     def __init__(self, config=None):
         super().__init__(config)
         self.machine_id = get_machine_id()
-        self.display = manager.Display(os.environ.get('XDG_CURRENT_DESKTOP', 'KDE').lower())
+        self.display = display.Display()
         self.register_options = RegisterOptions(match='exact', invoke='roundrobin')
 
     async def onJoin(self, details):
         self.log.info("Successfully joined session {}".format(details.session))
-
         self.register(self.display.is_locked, PROCEDURE_IS_LOCKED.format(self.machine_id), self.register_options)
         self.register(self.display.lock, PROCEDURE_LOCK.format(self.machine_id), self.register_options)
 
